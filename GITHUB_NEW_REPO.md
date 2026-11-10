@@ -187,18 +187,14 @@ Not uploaded: `*.rar`, `__pycache__/`, the 2.6 GB generated database (reproduce 
 
 ---
 
-## Security note before publishing
+## Security note
 
-These files contain the local sandbox passwords (`challengepass`, `rootpass`) in plain
-text: `run_expansion_linux.py`, `bench_interleaved.sh`, `final_compare.sh`,
-`test_recovery2.sh`, `test_edge.sh`, `check_table4.sh`, `benchmark_variant.py`,
-`SOLUTION.md`, `WRITEUP.md`.
-
-For a **public** repo, replace them with environment variables, e.g.
+Credentials are **not** stored in the repository. All scripts read them from the
+environment:
 
 ```bash
-: "${PGPASSWORD:?set PGPASSWORD}"
+export PGHOST=127.0.0.1 PGPORT=5433 PGUSER=challenge PGPASSWORD='<postgres-password>'
+export PGSSHUSER=root PGSSHPASSWORD='<ssh-password>'   # only for the SSH runners
 ```
 
-Ask and I will rewrite them to read `PGHOST/PGPORT/PGUSER/PGPASSWORD` from the
-environment before you push.
+Or use a `~/.pgpass` file. `generate_database.py` reads `PG_KAGGLE_CHALLENGE_PASS`.

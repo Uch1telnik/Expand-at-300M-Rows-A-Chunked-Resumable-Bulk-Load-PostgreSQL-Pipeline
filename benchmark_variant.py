@@ -3,12 +3,23 @@
 Usage: python3 benchmark_variant.py <sqlfile> [label] [--work_mem=256MB] [--nomaterial]
 """
 import json
+import os
 import sys
 from pathlib import Path
 
 from services.postgres_service import PostgresAdminService
 
 ROOT = Path(__file__).resolve().parent
+
+
+def _required(name):
+    value = os.getenv(name)
+    if not value:
+        raise SystemExit(
+            f"missing {name}: export PGHOST/PGPORT/PGUSER/PGPASSWORD "
+            f"(and PGSSHUSER/PGSSHPASSWORD for the SSH connection)"
+        )
+    return value
 
 
 def main():
@@ -20,8 +31,13 @@ def main():
         fused = fused.replace("AS MATERIALIZED", "AS NOT MATERIALIZED")
     service = PostgresAdminService()
     service.connect(
-        host="127.0.0.1", ssh_port=22, ssh_username="root", ssh_password="rootpass",
-        postgres_port=5433, sql_username="challenge", sql_password="challengepass",
+        host=os.getenv("PGHOST", "127.0.0.1"),
+        ssh_port=int(os.getenv("PGSSHPORT", "22")),
+        ssh_username=os.getenv("PGSSHUSER", "root"),
+        ssh_password=_required("PGSSHPASSWORD"),
+        postgres_port=int(os.getenv("PGPORT", "5433")),
+        sql_username=os.getenv("PGUSER", "challenge"),
+        sql_password=_required("PGPASSWORD"),
     )
     lock_sql = (
         "LOCK TABLE public.table1, public.table2, public.table3, public.table4, "

@@ -1,9 +1,11 @@
 #!/bin/bash
 # Compare optimized table4 against the original recipe evaluated directly.
 set -e
-cd /mnt/c/Users/golub/Downloads/tsk/repo
-export PGHOST=127.0.0.1 PGPORT=5433 PGUSER=challenge PGPASSWORD=challengepass
-PSQL="psql -h 127.0.0.1 -p 5433 -U challenge -d kaggle_challenge -X -qAt -v ON_ERROR_STOP=1"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$SCRIPT_DIR"
+# Credentials come from the environment (PGPASSWORD) or ~/.pgpass.
+export PGHOST="${PGHOST:-127.0.0.1}" PGPORT="${PGPORT:-5433}" PGUSER="${PGUSER:-challenge}"
+PSQL="psql -h $PGHOST -p $PGPORT -U $PGUSER -d kaggle_challenge -X -qAt -v ON_ERROR_STOP=1"
 SQL=$(sed 's/{{source}}/public.raw_data/g' "SQL files/02_table4.sql" | sed 's/^INSERT INTO public.table4/INSERT INTO tmp_t4/')
 $PSQL -c 'DROP TABLE IF EXISTS tmp_t4; CREATE TABLE tmp_t4 (LIKE public.table4 INCLUDING ALL);'
 echo "$SQL" | $PSQL

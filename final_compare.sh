@@ -1,13 +1,15 @@
 #!/bin/bash
 # Final end-to-end semantic check: baseline snapshot vs optimized pipeline output.
 set -e
-cd /mnt/c/Users/golub/Downloads/tsk/repo
-export PGHOST=127.0.0.1 PGPORT=5433 PGUSER=challenge PGPASSWORD=challengepass
-PSQL="psql -h 127.0.0.1 -p 5433 -U challenge -d kaggle_challenge -X -qAt -v ON_ERROR_STOP=1"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$SCRIPT_DIR"
+# Credentials come from the environment (PGPASSWORD / PGSSHPASSWORD) or ~/.pgpass.
+export PGHOST="${PGHOST:-127.0.0.1}" PGPORT="${PGPORT:-5433}" PGUSER="${PGUSER:-challenge}"
+PSQL="psql -h $PGHOST -p $PGPORT -U $PGUSER -d kaggle_challenge -X -qAt -v ON_ERROR_STOP=1"
 
 echo "== baseline snapshot rebuild =="
-$PSQL -f /mnt/c/Users/golub/Downloads/tsk/reset.sql >/dev/null
-$PSQL -f /mnt/c/Users/golub/Downloads/tsk/repo/wrapped_debug.sql >/dev/null
+$PSQL -f "$SCRIPT_DIR/reset.sql" >/dev/null
+$PSQL -f "$SCRIPT_DIR/wrapped_debug.sql" >/dev/null
 $PSQL <<'SQL'
 DROP TABLE IF EXISTS base_t1, base_t2, base_t3, base_t4, base_t5, base_t6;
 CREATE TABLE base_t3 AS
@@ -35,7 +37,7 @@ CREATE TABLE base_t2 AS
 SQL
 
 echo "== optimized pipeline =="
-$PSQL -f /mnt/c/Users/golub/Downloads/tsk/reset.sql >/dev/null
+$PSQL -f "$SCRIPT_DIR/reset.sql" >/dev/null
 $PSQL -c 'DROP SCHEMA IF EXISTS pgdm_runtime CASCADE;' >/dev/null 2>&1 || true
 python3 optimized_pipeline.py --db kaggle_challenge --chunk-rows 200000 > /tmp/final_run3.log 2>&1
 tail -16 /tmp/final_run3.log

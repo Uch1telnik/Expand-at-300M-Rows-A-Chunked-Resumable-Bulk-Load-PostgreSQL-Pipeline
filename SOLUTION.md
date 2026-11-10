@@ -42,17 +42,18 @@ benchmark/validation harness used to produce the numbers in [WRITEUP.md](./WRITE
 ## Environment
 
 * WSL2 Ubuntu, PostgreSQL 18 (`pg_ctlcluster 18 main start`, port **5433**), SSH on 22.
-* DB `kaggle_challenge`, role `challenge` / `challengepass`.
+* DB `kaggle_challenge`, role `challenge` (password from `PGPASSWORD`).
 * Generate data:
   ```bash
-  PG_KAGGLE_CHALLENGE_PASS=challengepass python3 generate_database.py \
+  export PG_KAGGLE_CHALLENGE_PASS='<postgres-password>'
+  python3 generate_database.py \
     --rows 1000000 --replace --host 127.0.0.1 --postgres_port 5433 \
     --user challenge --admin_database postgres
   ```
 * Run optimized pipeline:
   ```bash
-  PGHOST=127.0.0.1 PGPORT=5433 PGUSER=challenge PGPASSWORD=challengepass \
-    python3 optimized_pipeline.py --db kaggle_challenge --chunk-rows 200000
+  export PGHOST=127.0.0.1 PGPORT=5433 PGUSER=challenge PGPASSWORD='<postgres-password>'
+  python3 optimized_pipeline.py --db kaggle_challenge --chunk-rows 200000
   ```
 * Resume after a crash: add `--resume`.
 * `reset.sql` must precede a baseline rerun (destination tables must be empty).

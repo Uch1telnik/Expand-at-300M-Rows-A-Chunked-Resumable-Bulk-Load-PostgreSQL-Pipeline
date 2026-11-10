@@ -1,12 +1,14 @@
 #!/bin/bash
 # Interrupt after several committed chunks, then resume and prove integrity.
 set -u
-cd /mnt/c/Users/golub/Downloads/tsk/repo
-export PGHOST=127.0.0.1 PGPORT=5433 PGUSER=challenge PGPASSWORD=challengepass
-PSQL="psql -h localhost -U challenge -d kaggle_challenge -X -qAt -v ON_ERROR_STOP=1"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$SCRIPT_DIR"
+# Credentials come from the environment (PGPASSWORD) or ~/.pgpass.
+export PGHOST="${PGHOST:-127.0.0.1}" PGPORT="${PGPORT:-5433}" PGUSER="${PGUSER:-challenge}"
+PSQL="psql -h $PGHOST -p $PGPORT -U $PGUSER -d kaggle_challenge -X -qAt -v ON_ERROR_STOP=1"
 
 $PSQL -c 'DROP SCHEMA IF EXISTS pgdm_runtime CASCADE;' >/dev/null 2>&1
-$PSQL -f /mnt/c/Users/golub/Downloads/tsk/reset.sql >/dev/null
+$PSQL -f "$SCRIPT_DIR/reset.sql" >/dev/null
 
 echo "== start expansion, kill client after 20s (some chunks committed) =="
 setsid python3 optimized_pipeline.py --db kaggle_challenge --chunk-rows 100000 >/tmp/crash2.log 2>&1 &

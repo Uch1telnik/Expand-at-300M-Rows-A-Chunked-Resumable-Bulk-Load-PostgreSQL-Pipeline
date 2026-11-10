@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# PyCharm
+.idea/
+*.iml
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite-shm
+*.sqlite-wal
+
+# Logs
+*.log
+# ...but keep benchmark / recovery evidence for the writeup
+!results/*.log
+
+# Redundant local archives (the real files are committed)
+*.rar
+
+# Generated Kaggle writeup bundles
+kaggle_writeup_bundle.zip
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build / packaging
+build/
+dist/
+*.egg-info/

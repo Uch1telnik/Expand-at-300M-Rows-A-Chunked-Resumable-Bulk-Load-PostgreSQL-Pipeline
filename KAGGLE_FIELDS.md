@@ -171,7 +171,8 @@ If you generate 10M rows before publishing, add one line to section 4.1 and a
 scaling row to section 5, using:
 
 ```bash
-PG_KAGGLE_CHALLENGE_PASS=challengepass python3 generate_database.py \
+export PG_KAGGLE_CHALLENGE_PASS='<postgres-password>'
+python3 generate_database.py \
   --rows 10000000 --replace --host 127.0.0.1 --postgres_port 5433 \
   --user challenge --admin_database postgres
 ```

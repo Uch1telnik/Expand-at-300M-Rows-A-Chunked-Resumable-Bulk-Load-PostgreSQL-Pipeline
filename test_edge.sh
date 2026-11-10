@@ -1,11 +1,13 @@
 #!/bin/bash
 # Edge case: all chunks done + indexes present, but job row still 'running'.
 set -u
-cd /mnt/c/Users/golub/Downloads/tsk/repo
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$SCRIPT_DIR"
 mkdir -p results
-export PGHOST=127.0.0.1 PGPORT=5433 PGUSER=challenge PGPASSWORD=challengepass
-PSQL="psql -h 127.0.0.1 -p 5433 -U challenge -d kaggle_challenge -X -qAt -v ON_ERROR_STOP=1"
-$PSQL -f /mnt/c/Users/golub/Downloads/tsk/reset.sql >/dev/null 2>&1
+# Credentials come from the environment (PGPASSWORD) or ~/.pgpass.
+export PGHOST="${PGHOST:-127.0.0.1}" PGPORT="${PGPORT:-5433}" PGUSER="${PGUSER:-challenge}"
+PSQL="psql -h $PGHOST -p $PGPORT -U $PGUSER -d kaggle_challenge -X -qAt -v ON_ERROR_STOP=1"
+$PSQL -f "$SCRIPT_DIR/reset.sql" >/dev/null 2>&1
 $PSQL -c 'DROP SCHEMA IF EXISTS pgdm_runtime CASCADE;' >/dev/null 2>&1 || true
 python3 optimized_pipeline.py --db kaggle_challenge --chunk-rows 100000 > results/edge_first.log 2>&1
 # Simulate crash window: data + indexes committed, but job status not updated.

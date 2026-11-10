@@ -181,19 +181,14 @@ git push origin main
 
 ---
 
-## Security note (recommended before publishing)
+## Security note
 
-The test/benchmark scripts contain the local sandbox passwords
-(`challengepass`, `rootpass`) in plain text. If this repo is public, replace them
-with environment variables, for example:
+Credentials are **not** stored in the repository. All scripts read them from the
+environment:
 
 ```bash
-: "${PGPASSWORD:?set PGPASSWORD}"
+export PGHOST=127.0.0.1 PGPORT=5433 PGUSER=challenge PGPASSWORD='<postgres-password>'
+export PGSSHUSER=root PGSSHPASSWORD='<ssh-password>'   # only for the SSH runners
 ```
 
-Files that currently hardcode them:
-`run_expansion_linux.py`, `bench_interleaved.sh`, `final_compare.sh`, `test_recovery2.sh`,
-`test_edge.sh`, `check_table4.sh`, `benchmark_variant.py`, `SOLUTION.md`, `WRITEUP.md`.
-
-Ask me and I will rewrite them to read `PGHOST/PGPORT/PGUSER/PGPASSWORD` from the
-environment (with the same defaults documented in the README) before you push.
+Or use a `~/.pgpass` file. `generate_database.py` reads `PG_KAGGLE_CHALLENGE_PASS`.

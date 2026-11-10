@@ -297,21 +297,20 @@ source, which can be bounded by computing `table3`/`table4` once and persisting 
 
 ```bash
 # 1. Generate a database (Linux side)
-PG_KAGGLE_CHALLENGE_PASS=challengepass python3 generate_database.py \
+export PG_KAGGLE_CHALLENGE_PASS='<postgres-password>'
+python3 generate_database.py \
   --rows 1000000 --replace --host 127.0.0.1 --postgres_port 5433 \
   --user challenge --admin_database postgres
 
 # 2. Baseline through the service (measured total)
-PGHOST=127.0.0.1 PGPORT=5433 PGUSER=challenge PGPASSWORD=challengepass \
-  python3 run_expansion_linux.py kaggle_challenge "SQL files" baseline
+export PGHOST=127.0.0.1 PGPORT=5433 PGUSER=challenge PGPASSWORD='<postgres-password>'
+python3 run_expansion_linux.py kaggle_challenge "SQL files" baseline
 
 # 3. Optimized, chunked, resumable
-PGHOST=127.0.0.1 PGPORT=5433 PGUSER=challenge PGPASSWORD=challengepass \
-  python3 optimized_pipeline.py --db kaggle_challenge --chunk-rows 200000
+python3 optimized_pipeline.py --db kaggle_challenge --chunk-rows 200000
 
 # 4. Resume after a crash
-PGHOST=127.0.0.1 PGPORT=5433 PGUSER=challenge PGPASSWORD=challengepass \
-  python3 optimized_pipeline.py --db kaggle_challenge --chunk-rows 200000 --resume
+python3 optimized_pipeline.py --db kaggle_challenge --chunk-rows 200000 --resume
 
 # 5. Semantic and recovery gates
 bash final_compare.sh
