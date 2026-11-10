@@ -1,0 +1,37 @@
+job 9045db9726b907ae98251ad3: range 1..1000000, chunk 100000, resumed=False, completed_chunks=0
+references: done in 3.885s
+indexes: dropped for bulk load (rebuilt at the end)
+chunk 1/10 [1..100000]: 2.680s
+chunk 2/10 [100001..200000]: 2.635s
+chunk 3/10 [200001..300000]: 2.658s
+chunk 4/10 [300001..400000]: 2.680s
+chunk 5/10 [400001..500000]: 2.673s
+chunk 6/10 [500001..600000]: 2.667s
+chunk 7/10 [600001..700000]: 2.687s
+chunk 8/10 [700001..800000]: 2.743s
+chunk 9/10 [800001..900000]: 2.741s
+chunk 10/10 [900001..1000000]: 2.788s
+indexes: rebuilt and foreign keys re-validated in 3.194s
+data phase: 10 chunks, 1000000 source rows, 26.954s summed
+verification: {"source_rows": 1000000, "table1_distinct_raw": 1000000, "table1_missing_raw": 0, "table1_orphan_raw": 0, "table1_rows": 1000000, "table2_orphan_parent": 0, "table2_rows": 2321522, "table3_rows": 4, "table4_rows": 27, "table5_rows": 1000000, "table6_rows": 1000000}
+{
+  "status": "data-complete",
+  "resumed": false,
+  "chunks": 10,
+  "source_rows": 1000000,
+  "chunk_seconds": 26.953982798999988,
+  "index_rebuild_seconds": 3.1937589559999964,
+  "verification": {
+    "source_rows": 1000000,
+    "table1_rows": 1000000,
+    "table1_distinct_raw": 1000000,
+    "table1_missing_raw": 0,
+    "table1_orphan_raw": 0,
+    "table2_rows": 2321522,
+    "table2_orphan_parent": 0,
+    "table3_rows": 4,
+    "table4_rows": 27,
+    "table5_rows": 1000000,
+    "table6_rows": 1000000
+  }
+}

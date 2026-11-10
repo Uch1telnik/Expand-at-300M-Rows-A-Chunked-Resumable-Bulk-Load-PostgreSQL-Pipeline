@@ -1,0 +1,12 @@
+########## RECOVERY ##########
+committed_chunks=9
+table1_rows_at_crash=900000
+job=
+resume_exit=0
+  "status": "data-complete",
+  "resumed": true,
+duplicate_raw_id|0
+duplicate_table2_key|0
+missing_raw|0
+fk_violations|0
+counts|1000000/2321522/4/27/1000000/1000000

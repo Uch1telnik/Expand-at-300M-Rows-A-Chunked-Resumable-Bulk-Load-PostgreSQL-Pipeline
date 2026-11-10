@@ -1,0 +1,13 @@
+########## MEMORY SCALING ##########
+chunk_rows=50000 chunks=20 data_s=28.64150800499965 idx_s=3.217553600000201 peak_rss_kb=21888 wall=0:38.03 table2=2
+2321522
+2
+2321522
+chunk_rows=200000 chunks=5 data_s=26.45750984099982 idx_s=3.4142487700000856 peak_rss_kb=21888 wall=0:35.10 table2=2
+2321522
+2
+2321522
+chunk_rows=500000 chunks=2 data_s=25.747694551999984 idx_s=3.6179344360000414 peak_rss_kb=21888 wall=0:34.53 table2=2
+2321522
+2
+2321522

@@ -1,0 +1,13 @@
+# Normalize line endings so editing on Windows does not dirty the whole repo.
+* text=auto eol=lf
+
+# Shell / SQL must stay LF so they run in Linux/WSL.
+*.sh    text eol=lf
+*.sql   text eol=lf
+*.py    text eol=lf
+
+# Binary assets
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.rar   binary

@@ -1,0 +1,8 @@
+indexes: all chunks already applied and indexes present; skipping bulk phase
+indexes: already present (rebuild committed before the crash), skipping
+data phase: 10 chunks, 1000000 source rows, 26.954s summed
+  "status": "data-complete",
+  "resumed": true,
+t1|1000000
+dup_t2|0
+counts|1000000/2321522/1000000/1000000
